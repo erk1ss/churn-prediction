@@ -19,3 +19,7 @@ Clienții cu vechime mică (0-5 luni) au o rată de abandon mult mai mare compar
 - **Two year:** ~3% rată de abandon (aproape nulă)
 
 **Concluzie:** lipsa unui angajament contractual pe termen lung e unul dintre cei mai puternici predictori ai abandonului. Combinat cu observația despre `tenure`, profilul de risc maxim este: client nou + contract month-to-month.
+
+## MonthlyCharges vs Churn
+
+Clienții care au renunțat la serviciu au, în medie, facturi lunare mai mari (mediană ~$80) comparativ cu cei care au rămas (mediană ~$65). Distribuția arată că riscul de abandon crește odată cu costul abonamentului — posibil din cauza sensibilității la preț sau a percepției unui raport cost-beneficiu nesatisfăcător. Această observație completează profilul de risc identificat anterior (client nou, contract month-to-month) cu un al treilea factor: cost lunar ridicat.
