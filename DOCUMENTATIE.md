@@ -23,3 +23,7 @@ Clienții cu vechime mică (0-5 luni) au o rată de abandon mult mai mare compar
 ## MonthlyCharges vs Churn
 
 Clienții care au renunțat la serviciu au, în medie, facturi lunare mai mari (mediană ~$80) comparativ cu cei care au rămas (mediană ~$65). Distribuția arată că riscul de abandon crește odată cu costul abonamentului — posibil din cauza sensibilității la preț sau a percepției unui raport cost-beneficiu nesatisfăcător. Această observație completează profilul de risc identificat anterior (client nou, contract month-to-month) cu un al treilea factor: cost lunar ridicat.
+
+## PaymentMethod vs Churn
+
+Clienții care plătesc prin "Electronic check" au o rată de abandon de ~45%, semnificativ mai mare comparativ cu celelalte metode de plată (Mailed check, Bank transfer automat, Credit card automat), care au rate de ~17-19%. Plățile automate (debit direct) par asociate cu o retenție mai bună, posibil din cauza lipsei de interacțiune activă lunară care ar putea declanșa decizia de anulare.
