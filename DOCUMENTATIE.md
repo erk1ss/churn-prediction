@@ -27,3 +27,27 @@ Clienții care au renunțat la serviciu au, în medie, facturi lunare mai mari (
 ## PaymentMethod vs Churn
 
 Clienții care plătesc prin "Electronic check" au o rată de abandon de ~45%, semnificativ mai mare comparativ cu celelalte metode de plată (Mailed check, Bank transfer automat, Credit card automat), care au rate de ~17-19%. Plățile automate (debit direct) par asociate cu o retenție mai bună, posibil din cauza lipsei de interacțiune activă lunară care ar putea declanșa decizia de anulare.
+
+## Analiză sistematică completă (toate variabilele)
+
+Pentru a evita o selecție arbitrară, am verificat automat rata de abandon pentru toate variabilele categorice și corelațiile pentru toate variabilele numerice.
+
+**Variabile fără impact semnificativ:**
+- `gender` — practic identic (26.9% vs 26.2% abandon) — genul nu influențează decizia de abandon
+- `PhoneService` — diferență mică (24.9% vs 26.7%)
+
+**Variabile noi cu impact notabil:**
+- `Partner` — clienții fără partener au 33% abandon, vs 19.7% pentru cei cu partener
+- `Dependents` — fără persoane în întreținere: 31.3% abandon, vs 15.5% cu persoane în întreținere
+- Pattern general: stabilitatea în viața personală (relație, familie) corelează cu retenție mai bună
+
+**Corelații numerice:**
+- `tenure` și `TotalCharges` au corelație foarte mare (0.83) — multicoliniaritate, de luat în considerare la modelare
+- `tenure` are cea mai puternică corelație cu `Churn` (-0.35), urmat de `MonthlyCharges` (0.19) și `SeniorCitizen` (0.15)
+
+## Servicii de internet și adiționale vs Churn
+
+- **InternetService:** Fiber optic are cea mai mare rată de abandon (41.9%), urmat de DSL (19%) și clienții fără internet (7.4%). Serviciul "premium" (fibră) e paradoxal asociat cu abandon mai mare, posibil din cauza prețului ridicat sau a problemelor de satisfacție specifice acestui tip de conexiune.
+- **OnlineSecurity, OnlineBackup, DeviceProtection:** Pattern consistent — clienții fără aceste servicii adiționale au rate de abandon de 2-3x mai mari decât cei care le au (~40% vs ~15-22%). Clienții mai "investiți" în servicii suplimentare par mai loiali.
+
+**Profil de risc actualizat (complet):** client nou, fără partener/dependenți,
