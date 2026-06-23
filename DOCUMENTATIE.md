@@ -50,4 +50,11 @@ Pentru a evita o selecție arbitrară, am verificat automat rata de abandon pent
 - **InternetService:** Fiber optic are cea mai mare rată de abandon (41.9%), urmat de DSL (19%) și clienții fără internet (7.4%). Serviciul "premium" (fibră) e paradoxal asociat cu abandon mai mare, posibil din cauza prețului ridicat sau a problemelor de satisfacție specifice acestui tip de conexiune.
 - **OnlineSecurity, OnlineBackup, DeviceProtection:** Pattern consistent — clienții fără aceste servicii adiționale au rate de abandon de 2-3x mai mari decât cei care le au (~40% vs ~15-22%). Clienții mai "investiți" în servicii suplimentare par mai loiali.
 
-**Profil de risc actualizat (complet):** client nou, fără partener/dependenți,
+**Profil de risc actualizat (complet):** client nou, fără partener/dependenți, contract month-to-month, internet prin fibră optic, fără servicii de securitate/backup, factură lunară mare, plată prin electronic check.
+
+## Preprocesare pentru ML
+
+- Eliminat `customerID` (fără valoare predictivă) și coloana temporară `Churn_numeric`
+- One-Hot Encoding pentru toate variabilele categorice (`pd.get_dummies`, `drop_first=True`) — dataset-ul a crescut de la 21 la 31 coloane
+- Train/Test split: 80/20, cu `stratify=y` pentru a păstra proporția claselor (dezechilibrul 73.5%/26.5%) identică în ambele seturi
+- Scalare cu `StandardScaler` pentru `tenure`, `MonthlyCharges`, `TotalCharges` — fit doar pe train, transform pe test (evităm data leakage)
