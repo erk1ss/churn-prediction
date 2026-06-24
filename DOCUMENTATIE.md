@@ -58,3 +58,25 @@ Pentru a evita o selecție arbitrară, am verificat automat rata de abandon pent
 - One-Hot Encoding pentru toate variabilele categorice (`pd.get_dummies`, `drop_first=True`) — dataset-ul a crescut de la 21 la 31 coloane
 - Train/Test split: 80/20, cu `stratify=y` pentru a păstra proporția claselor (dezechilibrul 73.5%/26.5%) identică în ambele seturi
 - Scalare cu `StandardScaler` pentru `tenure`, `MonthlyCharges`, `TotalCharges` — fit doar pe train, transform pe test (evităm data leakage)
+
+## Primul model: Logistic Regression
+
+Am antrenat un model de Logistic Regression ca baseline (model simplu, interpretabil, punct de referință pentru modele viitoare mai complexe).
+
+### Interpretarea coeficienților
+
+Coeficienții confirmă marea majoritate a observațiilor din EDA:
+- **`InternetService_Fiber optic`: +1.18** (cel mai mare coeficient pozitiv) — confirmă riscul ridicat asociat fibrei optice
+- **`tenure`: -1.26** — confirmă că vechimea reduce semnificativ riscul de abandon
+- **`Contract_Two year`: -1.31** și **`Contract_One year`: -0.68** — confirmă că contractele lungi reduc riscul
+- **`PaymentMethod_Electronic check`: +0.39** — confirmă riscul ridicat asociat acestei metode de plată
+
+### Descoperire: Multicoliniaritate (TotalCharges, MonthlyCharges, tenure)
+
+`MonthlyCharges` a apărut cu coeficient **negativ** (-0.47), contrazicând aparent corelația pozitivă observată în EDA (0.19). Cauza: **multicoliniaritate** — `tenure`, `MonthlyCharges` și `TotalCharges` sunt puternic corelate între ele (`tenure`-`TotalCharges`: 0.83), deoarece `TotalCharges` ≈ `tenure × MonthlyCharges`. Când variabile explicative sunt puternic corelate, modelul nu poate izola clar efectul individual al fiecăreia, ceea ce poate produce coeficienți individuali înșelători, chiar dacă predicțiile modelului per total rămân valide.
+
+**Decizie:** eliminăm `TotalCharges` din setul de variabile, păstrând `tenure` și `MonthlyCharges` (conceptual distincte: vechime vs. cost lunar), pentru a reduce multicoliniaritatea și a obține coeficienți mai ușor de interpretat.
+
+### Observație suplimentară
+
+Mai multe variabile legate de "No internet service" (StreamingMovies, OnlineSecurity, DeviceProtection etc.) au coeficienți identici (-0.172521) — normal, fiindcă sunt perfect corelate (un client fără internet nu poate avea niciunul din aceste servicii, informația fiind redundantă).
