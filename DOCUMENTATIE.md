@@ -88,3 +88,34 @@ Eliminarea `TotalCharges` nu a rezolvat complet problema coeficientului negativ 
 **Concept relevant — paradoxul Simpson:** relația simplă (bivariată) dintre `MonthlyCharges` și `Churn`, observată în EDA, e pozitivă (corelație 0.19) — facturi mai mari, abandon mai mare. Dar relația condiționată (controlând pentru toate celelalte variabile simultan, inclusiv ce servicii are clientul) devine negativă în model. Nu e o eroare — modelul răspunde la o întrebare diferită: "între doi clienți cu exact aceleași servicii și contract, dar facturi diferite, care are risc mai mare?" — iar răspunsul izolat de context poate diferi de tendința generală brută.
 
 **Decizie:** documentăm fenomenul ca o limitare cunoscută a interpretării coeficienților individuali în prezența multicoliniarității, dar continuăm cu acest model, fiindcă scopul principal e capacitatea predictivă (evaluată separat prin metrici de clasificare), nu interpretarea izolată a fiecărui coeficient.
+
+## Evaluarea modelului — Logistic Regression (baseline)
+
+### Confusion Matrix
+
+|  | Predicție: No Churn | Predicție: Churn |
+|---|---|---|
+| **Real: No Churn** | 918 (TN) | 117 (FP) |
+| **Real: Churn** | 170 (FN) | 204 (TP) |
+
+### Metrici
+
+| Metric | No Churn | Churn |
+|---|---|---|
+| Precision | 0.84 | 0.64 |
+| Recall | 0.89 | 0.55 |
+| F1-score | 0.86 | 0.59 |
+
+**Accuracy generală: 80%**
+
+### Interpretare
+
+Modelul are accuracy de 80%, doar cu 6.5 puncte peste un model "naiv" care ar prezice mereu "No Churn" (baseline de 73.5%, dat fiind dezechilibrul de clase). 
+
+Pentru clasa de interes (Churn):
+- **Precision 0.64** — din clienții marcați ca risc de abandon, 64% abandonează efectiv
+- **Recall 0.55** — modelul identifică doar 55% din clienții care abandonează efectiv, ratând 45% (170 din 374 clienți reali la risc, clasificați greșit ca "No Churn")
+
+**Concluzie de business:** modelul are o capacitate predictivă utilă, dar limitată — ratează aproape jumătate dintre clienții care abandonează real, ceea ce ar limita eficiența unor acțiuni proactive de retenție bazate exclusiv pe acest model. Recall-ul scăzut e cauzat probabil de dezechilibrul de clase din dataset (26.5% Churn), care face ca modelul să fie predispus să prezică mai des clasa majoritară.
+
+**Pași următori de explorat:** ajustarea threshold-ului de decizie, `class_weight='balanced'`.
