@@ -119,3 +119,26 @@ Pentru clasa de interes (Churn):
 **Concluzie de business:** modelul are o capacitate predictivă utilă, dar limitată — ratează aproape jumătate dintre clienții care abandonează real, ceea ce ar limita eficiența unor acțiuni proactive de retenție bazate exclusiv pe acest model. Recall-ul scăzut e cauzat probabil de dezechilibrul de clase din dataset (26.5% Churn), care face ca modelul să fie predispus să prezică mai des clasa majoritară.
 
 **Pași următori de explorat:** ajustarea threshold-ului de decizie, `class_weight='balanced'`.
+
+## Class Weight Balanced — comparație trade-off
+
+Am reantrenat modelul cu `class_weight='balanced'`, care penalizează mai mult erorile pe clasa minoritară (Churn) în timpul antrenării, compensând dezechilibrul natural al claselor (26.5% Churn vs 73.5% No Churn).
+
+### Comparație directă (clasa Churn)
+
+| Metric | Fără balanced | Cu balanced |
+|---|---|---|
+| Precision | 0.64 | 0.51 |
+| Recall | 0.55 | 0.77 |
+| F1-score | 0.59 | 0.61 |
+| Accuracy generală | 80% | 74% |
+| False Negative (clienți la risc ratați) | 170 | 85 |
+| False Positive (alarme false) | 117 | 282 |
+
+### Interpretare — trade-off precision vs recall
+
+`class_weight='balanced'` crește semnificativ recall-ul (de la 55% la 77%), reducând la jumătate numărul de clienți reali la risc ratați de model (de la 170 la 85). În schimb, precision-ul scade (de la 64% la 51%), dublând aproape numărul de alarme false.
+
+**Decizia depinde de costul de business al celor două tipuri de erori:**
+- Dacă acțiunile de retenție (discount, contact proactiv) sunt ieftine, varianta `balanced` e preferabilă — prioritizează prinderea cât mai multor clienți la risc real, acceptând mai multe alarme false.
+- Dacă acțiunile de retenție sunt costisitoare, varianta fără `balanced` e mai prudentă —
