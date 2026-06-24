@@ -80,3 +80,11 @@ Coeficienții confirmă marea majoritate a observațiilor din EDA:
 ### Observație suplimentară
 
 Mai multe variabile legate de "No internet service" (StreamingMovies, OnlineSecurity, DeviceProtection etc.) au coeficienți identici (-0.172521) — normal, fiindcă sunt perfect corelate (un client fără internet nu poate avea niciunul din aceste servicii, informația fiind redundantă).
+
+## Multicoliniaritate — investigație extinsă
+
+Eliminarea `TotalCharges` nu a rezolvat complet problema coeficientului negativ pentru `MonthlyCharges`. Motivul: `MonthlyCharges` e corelat și cu variabilele de servicii (StreamingTV, OnlineSecurity, MultipleLines, InternetService_Fiber optic, etc.) — clienții cu mai multe servicii plătesc mai mult, deci informația de cost e parțial "explicată" prin combinația acestor variabile.
+
+**Concept relevant — paradoxul Simpson:** relația simplă (bivariată) dintre `MonthlyCharges` și `Churn`, observată în EDA, e pozitivă (corelație 0.19) — facturi mai mari, abandon mai mare. Dar relația condiționată (controlând pentru toate celelalte variabile simultan, inclusiv ce servicii are clientul) devine negativă în model. Nu e o eroare — modelul răspunde la o întrebare diferită: "între doi clienți cu exact aceleași servicii și contract, dar facturi diferite, care are risc mai mare?" — iar răspunsul izolat de context poate diferi de tendința generală brută.
+
+**Decizie:** documentăm fenomenul ca o limitare cunoscută a interpretării coeficienților individuali în prezența multicoliniarității, dar continuăm cu acest model, fiindcă scopul principal e capacitatea predictivă (evaluată separat prin metrici de clasificare), nu interpretarea izolată a fiecărui coeficient.
