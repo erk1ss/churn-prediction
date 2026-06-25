@@ -142,3 +142,26 @@ Am reantrenat modelul cu `class_weight='balanced'`, care penalizează mai mult e
 **Decizia depinde de costul de business al celor două tipuri de erori:**
 - Dacă acțiunile de retenție (discount, contact proactiv) sunt ieftine, varianta `balanced` e preferabilă — prioritizează prinderea cât mai multor clienți la risc real, acceptând mai multe alarme false.
 - Dacă acțiunile de retenție sunt costisitoare, varianta fără `balanced` e mai prudentă —
+
+## Comparație finală a modelelor
+
+Am antrenat și evaluat 3 variante de model pentru a alege cea mai potrivită abordare:
+
+| Metric (clasa Churn) | LogReg simplu | LogReg balanced | Random Forest balanced |
+|---|---|---|---|
+| Precision | 0.64 | 0.51 | 0.54 |
+| Recall | 0.55 | **0.77** | 0.61 |
+| F1-score | 0.59 | 0.61 | 0.57 |
+| Accuracy | **0.80** | 0.74 | 0.76 |
+| False Negative | 170 | **85** | 144 |
+| False Positive | 117 | 282 | 196 |
+
+### Observații
+
+Contrar intuiției că un model mai complex (Random Forest) ar performa automat mai bine, rezultatele arată că **Logistic Regression cu `class_weight='balanced'`** obține cel mai bun recall (0.77) și cel mai mic număr de clienți reali la risc ratați (85 False Negative), depășind Random Forest pe această metrică prioritară.
+
+Această observație sugerează că relațiile dintre variabile și abandon sunt predominant simple/liniare în acest dataset (consistent cu pattern-urile clare, monotone observate în EDA) — complexitatea suplimentară a Random Forest (capacitatea de a capta relații neliniare) nu aduce un avantaj semnificativ aici.
+
+### Decizie finală
+
+Alegem **Logistic Regression cu `class_weight='balanced'`** ca model final, prioritizând recall-ul ridicat (prinderea a cât mai multor clienți reali la risc de abandon), relevant pentru un scenariu de business unde costul pierderii unui client (False Negative) e de obicei mai mare decât costul unei acțiuni de retenție nejustificate (False Positive). Modelul are și avantajul interpretabilității (coeficienți), util pentru a explica deciziile către echipele de business.
