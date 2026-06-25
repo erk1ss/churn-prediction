@@ -174,4 +174,4 @@ Am construit un dashboard interactiv (`app.py`) care permite introducerea caract
 
 Modelul, scaler-ul și lista de coloane folosite la antrenare au fost salvate cu `joblib` (`churn_model.pkl`, `scaler.pkl`, `model_columns.pkl`), pentru a putea fi încărcate direct în aplicație fără reantrenare.
 
-**Limitare cunoscută:** formularul include doar un subset reprezentativ de variabile (cele cu impact dovedit în EDA); variabilele neincluse (ex. servicii adiționale precum StreamingTV, OnlineSecurity) sunt presupuse implicit "No"/0, ceea ce poate afecta ușor acuratețea predicției pentru clienți reali care au aceste servicii.
+**Limitare cunoscută:** formularul include doar un subset reprezentativ de variabile (cele cu impact dovedit în EDA); variabilele neincluse (ex. servicii adiționale precum StreamingTV, OnlineSecurity) sunt presupuse implicit "No"/0, ceea ce poate afecta ușor acuratețea predicției pentru clienți reali care au aceste servicii. 
