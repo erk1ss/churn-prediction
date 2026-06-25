@@ -165,3 +165,13 @@ Această observație sugerează că relațiile dintre variabile și abandon sunt
 ### Decizie finală
 
 Alegem **Logistic Regression cu `class_weight='balanced'`** ca model final, prioritizând recall-ul ridicat (prinderea a cât mai multor clienți reali la risc de abandon), relevant pentru un scenariu de business unde costul pierderii unui client (False Negative) e de obicei mai mare decât costul unei acțiuni de retenție nejustificate (False Positive). Modelul are și avantajul interpretabilității (coeficienți), util pentru a explica deciziile către echipele de business.
+
+## Dashboard Streamlit
+
+Am construit un dashboard interactiv (`app.py`) care permite introducerea caracteristicilor unui client nou și afișează:
+- Predicția finală (risc ridicat/scăzut de abandon) și probabilitatea asociată
+- Factorii individuali care au contribuit la decizie, calculați ca produsul dintre valoarea caracteristicii clientului și coeficientul corespunzător din model (`model.coef_`)
+
+Modelul, scaler-ul și lista de coloane folosite la antrenare au fost salvate cu `joblib` (`churn_model.pkl`, `scaler.pkl`, `model_columns.pkl`), pentru a putea fi încărcate direct în aplicație fără reantrenare.
+
+**Limitare cunoscută:** formularul include doar un subset reprezentativ de variabile (cele cu impact dovedit în EDA); variabilele neincluse (ex. servicii adiționale precum StreamingTV, OnlineSecurity) sunt presupuse implicit "No"/0, ceea ce poate afecta ușor acuratețea predicției pentru clienți reali care au aceste servicii.
